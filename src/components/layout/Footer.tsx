@@ -1,12 +1,13 @@
 import { Instagram, Linkedin, MessageCircle, Mail } from 'lucide-react'
+import { Logo } from '@/components/ui/Logo'
+import { CONTACT, SITE } from '@/lib/config'
 
-// ← Edite seus links aqui
-const socialLinks = [
-  { label: 'Instagram', href: 'https://instagram.com/leangiraldes', Icon: Instagram },
-  { label: 'LinkedIn',  href: 'https://linkedin.com/in/leangiraldes',  Icon: Linkedin },
-  { label: 'WhatsApp',  href: 'https://wa.me/5518999999999',            Icon: MessageCircle },
-  { label: 'E-mail',    href: 'mailto:leanvitorlimagiraldes@gmail.com', Icon: Mail },
-]
+const SOCIAL_LINKS = [
+  { label: 'Instagram', href: CONTACT.instagram, Icon: Instagram },
+  { label: 'LinkedIn',  href: CONTACT.linkedin,  Icon: Linkedin  },
+  { label: 'WhatsApp',  href: CONTACT.whatsapp,  Icon: MessageCircle },
+  { label: 'E-mail',    href: `mailto:${CONTACT.email}`, Icon: Mail },
+] as const
 
 export function Footer() {
   const year = new Date().getFullYear()
@@ -16,31 +17,30 @@ export function Footer() {
       <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
 
         {/* Brand */}
-        <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-[6px] bg-blue-600 flex items-center justify-center">
-            <span className="text-white text-[10px] font-bold">LG</span>
-          </div>
-          <span className="text-[13px] text-[#333]">
-            Lean Giraldes — Modernizando empresas familiares.
-          </span>
+        <div className="flex flex-col items-center md:items-start gap-1">
+          <Logo />
+          <p className="text-[12px] text-[#252525] pl-8">{SITE.tagline}</p>
         </div>
 
-        {/* Social + copyright */}
+        {/* Redes sociais + copyright */}
         <div className="flex items-center gap-5">
-          {socialLinks.map(({ label, href, Icon }) => (
+          {SOCIAL_LINKS.map(({ label, href, Icon }) => (
             <a
               key={label}
               href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={label}
-              className="text-[#252525] hover:text-[#555] transition-colors duration-200"
+              target={href.startsWith('mailto') ? undefined : '_blank'}
+              rel={href.startsWith('mailto') ? undefined : 'noopener noreferrer'}
+              aria-label={`${SITE.name} no ${label}`}
+              className="text-[#252525] hover:text-[#555] transition-colors duration-200 focus-visible:outline-none focus-visible:text-[#555]"
             >
-              <Icon className="w-4 h-4" strokeWidth={1.5} />
+              <Icon className="w-4 h-4" strokeWidth={1.5} aria-hidden="true" />
             </a>
           ))}
 
-          <span className="text-[#1e1e1e] text-[12px] pl-2 border-l border-white/[0.05]">
+          <span
+            className="text-[12px] text-[#1e1e1e] pl-4 border-l border-white/[0.05]"
+            aria-label={`Copyright ${year}`}
+          >
             © {year}
           </span>
         </div>

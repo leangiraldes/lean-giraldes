@@ -47,6 +47,16 @@ body {
 }
 
 /* -------------------------------------------------------
+   NAVEGAÇÃO POR ÂNCORAS COM HEADER FIXO
+   Compensa os 60px do header para que o título da seção
+   não fique escondido atrás da barra de navegação.
+   ------------------------------------------------------- */
+
+section[id] {
+  scroll-margin-top: 80px;
+}
+
+/* -------------------------------------------------------
    SCROLLBAR
    ------------------------------------------------------- */
 
@@ -55,7 +65,7 @@ body {
 ::-webkit-scrollbar-thumb { background: #1a1a1a; border-radius: 2px; }
 
 /* -------------------------------------------------------
-   SELEÇÃO
+   SELEÇÃO DE TEXTO
    ------------------------------------------------------- */
 
 ::selection {
@@ -64,12 +74,17 @@ body {
 }
 
 /* -------------------------------------------------------
-   UTILITÁRIOS
+   FOCO VISÍVEL — acessibilidade para teclado
+   Usa anel de foco no estilo do Tailwind para manter
+   consistência com focus-visible nas classes utilitárias.
    ------------------------------------------------------- */
 
-/* Separador entre seções */
-.section-divider {
-  width: 100%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05) 50%, transparent);
+:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 3px;
+}
+
+/* Remove outline padrão quando usamos focus-visible customizado */
+:focus:not(:focus-visible) {
+  outline: none;
 }

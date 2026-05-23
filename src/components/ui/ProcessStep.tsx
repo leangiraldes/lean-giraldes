@@ -2,8 +2,7 @@
 
 import { motion } from 'framer-motion'
 import type { ProcessStepItem } from '@/data/process'
-
-const ease = [0.16, 1, 0.3, 1] as const
+import { SPRING } from '@/lib/motion'
 
 interface ProcessStepProps {
   step: ProcessStepItem
@@ -13,15 +12,18 @@ interface ProcessStepProps {
 
 export function ProcessStep({ step, index }: ProcessStepProps) {
   return (
-    <motion.div
+    <motion.li
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
-      transition={{ duration: 0.8, delay: index * 0.07, ease }}
-      className="group"
+      transition={{ duration: 0.8, delay: index * 0.07, ease: SPRING }}
+      className="group list-none"
     >
-      {/* Número — limpo, sem container */}
-      <span className="block text-[3.5rem] font-bold tracking-[-0.05em] leading-none text-[#161616] mb-6 group-hover:text-[#1e1e1e] transition-colors duration-300 select-none">
+      {/* Número da etapa — decorativo e identificador visual */}
+      <span
+        className="block text-[3.5rem] font-bold tracking-[-0.05em] leading-none text-[#161616] mb-6 group-hover:text-[#1e1e1e] transition-colors duration-300 select-none"
+        aria-hidden="true"
+      >
         {step.number}
       </span>
 
@@ -32,6 +34,6 @@ export function ProcessStep({ step, index }: ProcessStepProps) {
       <p className="text-[#484848] text-[14px] leading-[1.7]">
         {step.description}
       </p>
-    </motion.div>
+    </motion.li>
   )
 }

@@ -1,35 +1,68 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
+import { Logo } from '@/components/ui/Logo'
 
-const navLinks = [
-  { label: 'Início', href: '#inicio' },
-  { label: 'Sobre', href: '#sobre' },
+const NAV_LINKS = [
+  { label: 'Início',   href: '#inicio'   },
+  { label: 'Sobre',    href: '#sobre'    },
   { label: 'Serviços', href: '#servicos' },
-  { label: 'Cases', href: '#cases' },
+  { label: 'Cases',    href: '#cases'    },
   { label: 'Processo', href: '#processo' },
-  { label: 'Contato', href: '#contato' },
-]
+  { label: 'Contato',  href: '#contato'  },
+] as const
+
+const MOBILE_MENU_ID = 'mobile-nav-menu'
 
 export function Header() {
-  const [scrolled, setScrolled] = useState(false)
-  const [menuOpen, setMenuOpen] = useState(false)
+  const [scrolled, setScrolled]   = useState(false)
+  const [menuOpen, setMenuOpen]   = useState(false)
+  const hamburgerRef              = useRef<HTMLButtonElement>(null)
+  const firstLinkRef              = useRef<HTMLAnchorElement>(null)
 
+  // Detecta scroll para ativar fundo do header
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  // Fecha menu ao redimensionar para desktop
   useEffect(() => {
     const onResize = () => { if (window.innerWidth >= 768) setMenuOpen(false) }
     window.addEventListener('resize', onResize)
     return () => window.removeEventListener('resize', onResize)
   }, [])
 
-  const close = () => setMenuOpen(false)
+  // Trava scroll do body enquanto menu mobile estiver aberto
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [menuOpen])
+
+  // Foca no primeiro link ao abrir; devolve foco ao botão ao fechar
+  useEffect(() => {
+    if (menuOpen) {
+      // Aguarda animação antes de focar
+      const t = setTimeout(() => firstLinkRef.current?.focus(), 100)
+      return () => clearTimeout(t)
+    } else {
+      hamburgerRef.current?.focus()
+    }
+  }, [menuOpen])
+
+  const openMenu  = () => setMenuOpen(true)
+  const closeMenu = () => setMenuOpen(false)
+  const toggleMenu = () => setMenuOpen((v) => !v)
+
+  // Fecha menu ao pressionar Escape
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') closeMenu() }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [])
 
   return (
     <>
@@ -38,49 +71,53 @@ export function Header() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.1 }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled ? 'bg-[#040404]/80 backdrop-blur-xl border-b border-white/[0.05]' : 'bg-transparent'
+          scrolled
+            ? 'bg-[#040404]/85 backdrop-blur-xl border-b border-white/[0.05]'
+            : 'bg-transparent'
         }`}
       >
         <div className="max-w-5xl mx-auto px-6 h-[60px] flex items-center justify-between">
 
-          {/* Logo — limpo, sem animação extra */}
-          <a href="#inicio" onClick={close} className="flex items-center gap-2 group">
-            <div className="w-6 h-6 rounded-[6px] bg-blue-600 flex items-center justify-center group-hover:bg-blue-500 transition-colors duration-200">
-              <span className="text-white text-[10px] font-bold">LG</span>
-            </div>
-            <span className="text-[13px] font-medium text-[#888] group-hover:text-[#bbb] transition-colors duration-200">
-              Lean Giraldes
-            </span>
-          </a>
+          <Logo onClick={closeMenu} />
 
-          {/* Nav desktop — sem hover background, só mudança de cor */}
-          <nav className="hidden md:flex items-center gap-6">
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="text-[13px] text-[#3a3a3a] hover:text-[#888] transition-colors duration-200"
-              >
-                {link.label}
-              </a>
-            ))}
+          {/* Navegação principal — desktop */}
+          <nav aria-label="Navegação principal">
+            <ul className="hidden md:flex items-center gap-6 list-none">
+              {NAV_LINKS.map(({ label, href }) => (
+                <li key={href}>
+                  <a
+                    href={href}
+                    className="text-[13px] text-[#3a3a3a] hover:text-[#888] transition-colors duration-200 focus-visible:outline-none focus-visible:text-[#888]"
+                  >
+                    {label}
+                  </a>
+                </li>
+              ))}
+            </ul>
           </nav>
 
-          {/* CTA desktop — link simples */}
+          {/* CTA desktop */}
           <a
             href="#contato"
-            className="hidden md:block text-[13px] text-[#3a3a3a] hover:text-[#888] transition-colors duration-200"
+            className="hidden md:block text-[13px] text-[#3a3a3a] hover:text-[#888] transition-colors duration-200 focus-visible:outline-none focus-visible:text-[#888]"
           >
             Falar comigo →
           </a>
 
-          {/* Hamburger mobile */}
+          {/* Botão do menu mobile */}
           <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden text-[#444] hover:text-[#888] transition-colors duration-200"
-            aria-label={menuOpen ? 'Fechar menu' : 'Abrir menu'}
+            ref={hamburgerRef}
+            type="button"
+            onClick={toggleMenu}
+            aria-expanded={menuOpen}
+            aria-controls={MOBILE_MENU_ID}
+            aria-label={menuOpen ? 'Fechar menu de navegação' : 'Abrir menu de navegação'}
+            className="md:hidden text-[#444] hover:text-[#888] transition-colors duration-200 p-1 focus-visible:outline-none focus-visible:text-[#888]"
           >
-            {menuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+            {menuOpen
+              ? <X className="w-4 h-4" aria-hidden="true" />
+              : <Menu className="w-4 h-4" aria-hidden="true" />
+            }
           </button>
         </div>
       </motion.header>
@@ -88,26 +125,31 @@ export function Header() {
       {/* Menu mobile */}
       <AnimatePresence>
         {menuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -4 }}
+          <motion.nav
+            id={MOBILE_MENU_ID}
+            key="mobile-menu"
+            initial={{ opacity: 0, y: -6 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -4 }}
-            transition={{ duration: 0.18 }}
-            className="fixed top-[60px] left-0 right-0 z-50 bg-[#040404]/95 backdrop-blur-xl border-b border-white/[0.05] md:hidden"
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.18, ease: 'easeOut' }}
+            aria-label="Navegação principal (mobile)"
+            className="fixed top-[60px] left-0 right-0 z-50 bg-[#040404]/96 backdrop-blur-xl border-b border-white/[0.05] md:hidden"
           >
-            <div className="max-w-5xl mx-auto px-6 py-4 flex flex-col">
-              {navLinks.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  onClick={close}
-                  className="py-3 text-[14px] text-[#555] hover:text-[#aaa] transition-colors duration-200 border-b border-white/[0.04] last:border-0"
-                >
-                  {link.label}
-                </a>
+            <ul className="max-w-5xl mx-auto px-6 py-4 flex flex-col list-none">
+              {NAV_LINKS.map(({ label, href }, index) => (
+                <li key={href}>
+                  <a
+                    ref={index === 0 ? firstLinkRef : undefined}
+                    href={href}
+                    onClick={closeMenu}
+                    className="block py-3 text-[14px] text-[#555] hover:text-[#aaa] transition-colors duration-200 border-b border-white/[0.04] last:border-0 focus-visible:outline-none focus-visible:text-[#aaa]"
+                  >
+                    {label}
+                  </a>
+                </li>
               ))}
-            </div>
-          </motion.div>
+            </ul>
+          </motion.nav>
         )}
       </AnimatePresence>
     </>

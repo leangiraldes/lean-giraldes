@@ -1,28 +1,30 @@
 'use client'
 
 import { motion } from 'framer-motion'
-
-const ease = [0.16, 1, 0.3, 1] as const
+import { SPRING } from '@/lib/motion'
 
 export function About() {
   return (
     <section
       id="sobre"
+      aria-labelledby="about-heading"
       className="py-40 px-6 border-t border-white/[0.04]"
     >
       <div className="max-w-5xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.6fr] gap-20 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.6fr] gap-16 lg:gap-20 items-start">
 
-          {/* Coluna esquerda — identidade visual limpa */}
+          {/* Card de identidade */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.9, ease }}
+            transition={{ duration: 0.9, ease: SPRING }}
           >
             <div className="aspect-square rounded-2xl bg-[#0b0b0b] border border-white/[0.05] flex flex-col items-center justify-center gap-4">
-              {/* Monograma */}
-              <div className="w-16 h-16 rounded-2xl bg-blue-600 flex items-center justify-center">
+              <div
+                className="w-16 h-16 rounded-2xl bg-blue-600 flex items-center justify-center"
+                aria-hidden="true"
+              >
                 <span className="text-white text-xl font-bold tracking-tight">LG</span>
               </div>
               <div className="text-center">
@@ -32,19 +34,22 @@ export function About() {
             </div>
           </motion.div>
 
-          {/* Coluna direita — texto */}
+          {/* Texto */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.9, delay: 0.1, ease }}
+            transition={{ duration: 0.9, delay: 0.1, ease: SPRING }}
             className="lg:pt-4"
           >
             <span className="inline-block text-[11px] font-semibold text-blue-500 uppercase tracking-[0.18em] mb-6">
               Sobre
             </span>
 
-            <h2 className="text-[2rem] md:text-[2.6rem] font-bold tracking-[-0.04em] leading-[1.1] mb-8">
+            <h2
+              id="about-heading"
+              className="text-[2rem] md:text-[2.6rem] font-bold tracking-[-0.04em] leading-[1.1] mb-8"
+            >
               <span className="text-[#e8e8e8]">Visão de negócio.</span>
               <br />
               <span className="text-[#2e2e2e]">Execução técnica.</span>

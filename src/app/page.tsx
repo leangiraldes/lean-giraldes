@@ -13,7 +13,13 @@ export default function Home() {
   return (
     <>
       <Header />
-      <main>
+
+      {/*
+       * id="conteudo-principal" é o destino do skip link do layout.tsx.
+       * Permite que usuários de teclado pulem a navegação e cheguem
+       * direto ao conteúdo.
+       */}
+      <main id="conteudo-principal">
         <Hero />
         <About />
         <Philosophy />
@@ -23,6 +29,7 @@ export default function Home() {
         <Technology />
         <CTA />
       </main>
+
       <Footer />
     </>
   )

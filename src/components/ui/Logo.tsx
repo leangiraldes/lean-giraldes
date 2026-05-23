@@ -1,29 +1,39 @@
 'use client'
 
 interface LogoProps {
-  /** Callback opcional — usado no Header para fechar o menu mobile ao clicar */
+  /** Fecha o menu mobile ao clicar — usado no Header */
   onClick?: () => void
 }
 
 /**
- * Logotipo da marca — componente compartilhado entre Header e Footer.
- * Sempre leva ao topo da página (#inicio).
+ * Logo horizontal da marca — fiel ao brand guide.
+ * Formato: "LG" (extralight) + separador + "Lean Giraldes" (uppercase tracked).
+ * Usado em Header e Footer.
  */
 export function Logo({ onClick }: LogoProps) {
   return (
     <a
       href="#inicio"
       onClick={onClick}
-      className="inline-flex items-center gap-2 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[#040404] rounded"
+      className="inline-flex items-center gap-3 group focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/20 rounded"
       aria-label="Lean Giraldes — início da página"
     >
-      <div
-        className="w-6 h-6 rounded-[6px] bg-blue-600 flex items-center justify-center group-hover:bg-blue-500 transition-colors duration-200 shrink-0"
+      {/* Monograma LG — Inter ExtraLight, fiel ao brand guide */}
+      <span
+        className="text-[1.15rem] font-extralight tracking-[-0.03em] leading-none text-white/70 group-hover:text-white/90 transition-colors duration-300"
         aria-hidden="true"
       >
-        <span className="text-white text-[10px] font-bold leading-none">LG</span>
-      </div>
-      <span className="text-[13px] font-medium text-[#777] group-hover:text-[#bbb] transition-colors duration-200">
+        LG
+      </span>
+
+      {/* Separador vertical — referência ao logo horizontal do brand guide */}
+      <span
+        className="w-px h-3.5 bg-white/[0.10] shrink-0"
+        aria-hidden="true"
+      />
+
+      {/* Nome da marca em uppercase — tracking largo como no brand guide */}
+      <span className="text-[11px] font-light text-[#444] uppercase tracking-[0.2em] group-hover:text-[#666] transition-colors duration-300 leading-none">
         Lean Giraldes
       </span>
     </a>

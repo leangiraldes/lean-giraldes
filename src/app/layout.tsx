@@ -9,12 +9,10 @@ const inter = Inter({
   display: 'swap',
 })
 
-// Descrição reutilizada — evita repetição nas 3 ocorrências de metadata
 const description =
   'Branding, posicionamento e tecnologia para transformar negócios familiares em marcas mais fortes, modernas e confiáveis.'
 
 export const metadata: Metadata = {
-  // metadataBase é obrigatório para que URLs de OG e Twitter sejam absolutas
   metadataBase: new URL(SITE.url),
 
   title: {
@@ -23,25 +21,23 @@ export const metadata: Metadata = {
   },
   description,
   keywords: [
-    'branding',
-    'rebranding',
-    'empresas familiares',
-    'presença digital',
-    'automação',
-    'tecnologia',
-    'posicionamento',
-    'Lean Giraldes',
-    'modernização empresarial',
-    'negócios locais',
-    'identidade visual',
-    'consultoria empresarial',
-    'Presidente Prudente',
+    'branding', 'rebranding', 'empresas familiares', 'presença digital',
+    'automação', 'tecnologia', 'posicionamento', 'Lean Giraldes',
+    'modernização empresarial', 'negócios locais', 'identidade visual',
+    'consultoria empresarial', 'Presidente Prudente',
   ],
   authors: [{ name: SITE.name, url: SITE.url }],
   creator: SITE.name,
 
-  alternates: {
-    canonical: '/',
+  alternates: { canonical: '/' },
+
+  // Favicon e ícone da aba — usa o logo real da marca
+  icons: {
+    icon: [
+      { url: '/images/logo.png', type: 'image/png' },
+    ],
+    apple: '/images/logo.png',
+    shortcut: '/images/logo.png',
   },
 
   openGraph: {
@@ -51,12 +47,14 @@ export const metadata: Metadata = {
     siteName: SITE.name,
     title: `${SITE.name} | Modernizando Empresas Familiares`,
     description,
+    images: [{ url: '/images/logo.png', width: 1000, height: 1000, alt: 'Lean Giraldes' }],
   },
 
   twitter: {
     card: 'summary_large_image',
     title: `${SITE.name} | Modernizando Empresas Familiares`,
     description,
+    images: ['/images/logo.png'],
   },
 
   robots: {
@@ -70,17 +68,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="pt-BR" className={inter.variable} suppressHydrationWarning>
       <body className={`${inter.className} antialiased`}>
-        {/*
-         * Skip navigation — invisível visualmente, essencial para usuários
-         * de teclado e leitores de tela. Aparece ao receber foco via Tab.
-         */}
         <a
           href="#conteudo-principal"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:px-4 focus:py-2 focus:rounded-lg focus:bg-blue-600 focus:text-white focus:text-sm focus:font-medium focus:shadow-lg"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:px-4 focus:py-2 focus:rounded-lg focus:bg-blue-600 focus:text-white focus:text-sm focus:font-medium"
         >
           Ir para o conteúdo principal
         </a>
-
         {children}
       </body>
     </html>

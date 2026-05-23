@@ -2,91 +2,74 @@
 
 import { motion } from 'framer-motion'
 
-const technologies = [
+const ease = [0.16, 1, 0.3, 1] as const
+
+// Organizado em duas colunas temáticas
+const capabilities = [
   {
-    label: 'Inteligência Artificial',
-    description: 'Uso de IA para automatizar, criar e analisar com velocidade',
+    category: 'Estratégia & Marca',
+    items: ['Branding e identidade visual', 'Posicionamento de mercado', 'Design estratégico', 'Presença digital'],
   },
   {
-    label: 'Claude Code',
-    description: 'Desenvolvimento de soluções com IA avançada de ponta a ponta',
+    category: 'Tecnologia & Execução',
+    items: ['Sites modernos com Next.js', 'Automação com IA', 'Sistemas internos', 'Claude Code'],
   },
   {
-    label: 'Automação',
-    description: 'Processos automáticos que economizam tempo e reduzem erros',
-  },
-  {
-    label: 'Sites Modernos',
-    description: 'Next.js, React e tecnologias de alta performance',
-  },
-  {
-    label: 'Sistemas Internos',
-    description: 'Ferramentas digitais personalizadas para cada operação',
-  },
-  {
-    label: 'Organização Digital',
-    description: 'Notion, processos documentados e estrutura escalável',
-  },
-  {
-    label: 'Design Estratégico',
-    description: 'Identidade visual com intenção, propósito e consistência',
-  },
-  {
-    label: 'Presença Online',
-    description: 'Google, Instagram e WhatsApp integrados e otimizados',
+    category: 'Organização & Processo',
+    items: ['Documentação e Notion', 'Fluxos e operação', 'Google e redes sociais', 'Análise e diagnóstico'],
   },
 ]
 
 export function Technology() {
   return (
-    <section className="py-32 px-6 border-t border-white/[0.04]">
-      <div className="max-w-7xl mx-auto">
+    <section className="py-40 px-6 border-t border-white/[0.04]">
+      <div className="max-w-5xl mx-auto">
 
-        {/* Cabeçalho */}
+        {/* Cabeçalho — alinhado à esquerda, como o restante */}
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.65, ease: [0.21, 0.47, 0.32, 0.98] }}
-          className="text-center mb-16"
+          transition={{ duration: 0.9, ease }}
+          className="mb-20"
         >
-          <span className="inline-block text-xs font-semibold text-blue-500 uppercase tracking-[0.15em] mb-5">
-            Tecnologia
+          <span className="inline-block text-[11px] font-semibold text-blue-500 uppercase tracking-[0.18em] mb-6">
+            Capacidades
           </span>
-          <h2 className="text-3xl md:text-[2.5rem] font-bold text-[#f0f0f0] tracking-tight mb-4">
-            Ferramentas modernas.
+          <h2 className="text-[2rem] md:text-[2.6rem] font-bold tracking-[-0.04em] leading-[1.1]">
+            <span className="text-[#e8e8e8]">Ferramentas certas.</span>
             <br />
-            <span className="text-[#454545]">Resultados reais.</span>
+            <span className="text-[#2e2e2e]">Resultados reais.</span>
           </h2>
-          <p className="text-[#555] text-lg max-w-lg mx-auto leading-relaxed">
-            Domínio das ferramentas certas para entregar soluções que funcionam.
-          </p>
         </motion.div>
 
-        {/* Grid de ferramentas */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-          {technologies.map((tech, index) => (
+        {/* Lista de capacidades — sem cards, só texto + linha */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-x-16 gap-y-12">
+          {capabilities.map((group, groupIndex) => (
             <motion.div
-              key={tech.label}
-              initial={{ opacity: 0, y: 20 }}
+              key={group.category}
+              initial={{ opacity: 0, y: 14 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-50px' }}
-              transition={{
-                duration: 0.5,
-                delay: index * 0.05,
-                ease: [0.21, 0.47, 0.32, 0.98],
-              }}
-              className="group p-5 rounded-xl bg-[#0f0f0f] border border-white/[0.05] hover:border-white/[0.09] hover:bg-[#111] transition-all duration-300"
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.8, delay: groupIndex * 0.08, ease }}
             >
-              {/* Dot indicador */}
-              <div className="w-1.5 h-1.5 rounded-full bg-blue-700/60 mb-4 group-hover:bg-blue-500 transition-colors duration-300" />
-
-              <h4 className="font-semibold text-[#d0d0d0] text-sm mb-2 leading-snug">
-                {tech.label}
-              </h4>
-              <p className="text-[#444] text-xs leading-relaxed">
-                {tech.description}
+              {/* Categoria */}
+              <p className="text-[11px] font-semibold text-[#2a2a2a] uppercase tracking-[0.15em] mb-5">
+                {group.category}
               </p>
+
+              {/* Itens */}
+              <ul className="space-y-0">
+                {group.items.map((item, itemIndex) => (
+                  <li
+                    key={item}
+                    className="flex items-center gap-3 py-3 border-b border-white/[0.04] last:border-0"
+                  >
+                    <span className="w-1 h-1 rounded-full bg-[#1e1e1e] shrink-0" />
+                    <span className="text-[14px] text-[#555]">{item}</span>
+                  </li>
+                ))}
+              </ul>
             </motion.div>
           ))}
         </div>

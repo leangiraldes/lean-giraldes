@@ -1,10 +1,11 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Layers, Globe, Zap, TrendingUp, ArrowUpRight } from 'lucide-react'
+import { Layers, Globe, Zap, TrendingUp } from 'lucide-react'
 import type { Service } from '@/data/services'
 
-// Mapeamento de ícones — adicione novos aqui se precisar
+const ease = [0.16, 1, 0.3, 1] as const
+
 const iconMap = {
   Layers,
   Globe,
@@ -22,34 +23,25 @@ export function ServiceCard({ service, index }: ServiceCardProps) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
-      transition={{
-        duration: 0.6,
-        delay: index * 0.08,
-        ease: [0.21, 0.47, 0.32, 0.98],
-      }}
-      className="group relative p-8 rounded-2xl bg-[#0f0f0f] border border-white/[0.05] hover:border-white/[0.10] hover:bg-[#111] transition-all duration-300 cursor-default overflow-hidden"
+      transition={{ duration: 0.8, delay: index * 0.06, ease }}
+      className="group p-9 border-b border-r border-white/[0.055] last:border-r-0 hover:bg-white/[0.015] transition-colors duration-300"
     >
-      {/* Glow sutil no hover */}
-      <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-gradient-to-br from-blue-600/[0.03] to-transparent" />
+      {/* Ícone — sem container, apenas o próprio ícone */}
+      <Icon
+        className="w-5 h-5 text-[#2d2d2d] mb-7 group-hover:text-[#555] transition-colors duration-300"
+        strokeWidth={1.5}
+      />
 
-      {/* Ícone */}
-      <div className="relative w-11 h-11 rounded-xl bg-blue-600/10 border border-blue-500/20 flex items-center justify-center mb-6 group-hover:bg-blue-600/15 group-hover:border-blue-500/30 transition-all duration-300">
-        <Icon className="w-5 h-5 text-blue-500" strokeWidth={1.5} />
-      </div>
+      <h3 className="text-[15px] font-semibold text-[#c0c0c0] mb-3 tracking-[-0.01em]">
+        {service.title}
+      </h3>
 
-      {/* Header com arrow */}
-      <div className="flex items-start justify-between mb-3">
-        <h3 className="text-base font-semibold text-[#e8e8e8] leading-snug pr-4">
-          {service.title}
-        </h3>
-        <ArrowUpRight className="w-4 h-4 text-[#2a2a2a] group-hover:text-[#555] transition-colors duration-300 mt-0.5 shrink-0" />
-      </div>
-
-      {/* Descrição */}
-      <p className="text-[#666] text-sm leading-relaxed">{service.description}</p>
+      <p className="text-[#484848] text-[14px] leading-[1.7]">
+        {service.description}
+      </p>
     </motion.div>
   )
 }
